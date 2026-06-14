@@ -1,3 +1,4 @@
+import Logo from "@/assets/doto.png";
 import { useState } from "react";
 
 /* --- inline social icons (stroke = currentColor) --- */
@@ -105,7 +106,7 @@ export default function Footer() {
       <div className="flex flex-col justify-between gap-12 lg:flex-row">
         {/* Brand + signup + socials */}
         <div className="max-w-md">
-          <div className="mb-5 h-20 w-20 rounded-full bg-[#cfcfcf]" />
+          <img src={Logo} className="mb-5 h-20 w-20 rounded-full" />
           <h3 className="mb-3 text-[1.05rem] font-bold text-white">
             Power by Smart Chain
           </h3>

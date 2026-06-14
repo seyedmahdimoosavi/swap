@@ -1,3 +1,4 @@
+import Logo from "@/assets/doto.png";
 import { useState } from "react";
 
 function SearchIcon({ className }: { className?: string }) {
@@ -24,7 +25,7 @@ export default function Header() {
     <header className="w-full flex items-center justify-between gap-8 px-6 lg:px-[108px] py-6">
       <div className="flex items-center gap-8 shrink-0">
         {/* Logo placeholder (gray circle as in the design) */}
-        <div className="h-11 w-11 rounded-full bg-[#cfcfcf]" />
+        <img src={Logo} className="h-11 w-11 rounded-full " alt="logo" />
         <nav className="flex items-center gap-7 text-[0.95rem] text-white">
           {NAV_LINKS.map((link) => (
             <a
