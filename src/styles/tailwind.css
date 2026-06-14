@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Small reusable patterns that recur across the V3 components. */
+@layer components {
+  .v3-card-title {
+    @apply font-display text-[0.7rem] text-gold-dark tracking-[1px] mb-4;
+  }
+  .v3-field-label {
+    @apply font-display text-[0.6rem] text-gold-dark tracking-[0.5px];
+  }
+}
