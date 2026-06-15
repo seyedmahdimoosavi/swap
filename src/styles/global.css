@@ -28,6 +28,15 @@ body {
     line-height: 1.6;
 }
 
+button,
+input {
+    border: none;
+}
+
+button {
+    cursor: pointer;
+}
+
 .container {
     max-width: 613px;
     margin: 0 auto;
@@ -672,7 +681,7 @@ input[type=number] {
 
 .slippage-btn {
     flex: 1;
-    padding: 12px;
+    padding: 6px 12px;
     background: #515151;
     border: none;
     border-radius: 8px;

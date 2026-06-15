@@ -8,7 +8,7 @@ export const FACTORY_ADDRESS = '0xD728243a996C615a44Eedcd40AE311083B9b9279'; // 
 export const CHAIN_ID = 505;
 export const CHAIN_ID_HEX = '0x' + CHAIN_ID.toString(16);
 export const RPC_URL = 'https://rpc.dotone.online';
-export const EXPLORER_URL = 'https://dotonescan.com';
+export const EXPLORER_URL = 'https://dotscan.one';
 
 export const NETWORK_CONFIG = {
   chainId: CHAIN_ID_HEX,

@@ -1,12 +1,13 @@
-import { useWeb3 } from '../context/Web3Context';
-import { shortAddress } from '../lib/format';
+import { shortAddress } from "../lib/format";
+import { useWeb3 } from "../context/Web3Context";
 
 /**
  * Solid yellow "Connect Wallet" pill used in each feature card's header
  * (the redesign moved wallet connection out of the top nav and into the cards).
  */
 export default function ConnectWalletButton() {
-  const { isConnected, userAddress, connectWallet, disconnectWallet } = useWeb3();
+  const { isConnected, userAddress, connectWallet, disconnectWallet } =
+    useWeb3();
 
   if (isConnected && userAddress) {
     return (
@@ -17,7 +18,7 @@ export default function ConnectWalletButton() {
         <button
           onClick={disconnectWallet}
           title="Disconnect Wallet"
-          className="rounded-full border border-danger/60 bg-danger/10 px-3 py-2 text-[0.8rem] font-bold text-danger hover:bg-danger/20"
+          className="rounded-full border cursor-pointer border-danger/60 bg-danger/10 px-3 py-2 text-[0.8rem] font-bold text-danger hover:bg-danger/20"
         >
           ✕
         </button>
@@ -28,7 +29,7 @@ export default function ConnectWalletButton() {
   return (
     <button
       onClick={connectWallet}
-      className="rounded-full bg-gold px-6 py-2.5 text-[0.85rem] font-bold text-black transition-colors hover:bg-gold-light"
+      className="rounded-full bg-gold cursor-pointer border-none px-6 py-2.5 text-[0.85rem] font-bold text-black transition-colors hover:bg-gold-light"
     >
       Connect Wallet
     </button>

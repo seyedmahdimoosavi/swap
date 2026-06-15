@@ -1,8 +1,8 @@
 import ConnectWalletButton from "../../components/ConnectWalletButton";
-import { useState } from "react";
-import { useStatus } from "../../context/StatusContext";
 import { TOKEN_LIST } from "../../config/contracts";
 import { addressUrl } from "../../lib/format";
+import { useState } from "react";
+import { useStatus } from "../../context/StatusContext";
 
 function TokenCircle() {
   return (
@@ -12,7 +12,13 @@ function TokenCircle() {
 
 function ArrowRight() {
   return (
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      className="h-4 w-4"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <line x1="5" y1="12" x2="19" y2="12" />
       <polyline points="12 5 19 12 12 19" />
     </svg>
@@ -56,7 +62,9 @@ export default function Tokens() {
     <div id="addTokenSection">
       <div className="card">
         <div className="mb-5 flex items-center justify-between">
-          <div className="section-title mb-0 text-left">Add Tokens to Wallet</div>
+          <div className="section-title mb-0 text-left">
+            Add Tokens to Wallet
+          </div>
           <ConnectWalletButton />
         </div>
 
@@ -70,10 +78,14 @@ export default function Tokens() {
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <TokenCircle />
-                    <span className="text-[0.95rem] font-semibold text-white">{token.symbol}</span>
+                    <span className="text-[0.95rem] font-semibold text-white">
+                      {token.symbol}
+                    </span>
                     <span className="text-[0.85rem] text-white/45">ERC-20</span>
                   </div>
-                  <span className="text-[0.9rem] font-semibold text-white">{token.name}</span>
+                  <span className="text-[0.9rem] font-semibold text-white">
+                    {token.name}
+                  </span>
                 </div>
 
                 {/* Row 2: address pill + action */}
@@ -82,7 +94,7 @@ export default function Tokens() {
                     href={addressUrl(address)}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-3 rounded-lg bg-[#1c1c1c] px-4 py-2.5 font-mono text-[0.8rem] text-white/70 no-underline transition-colors hover:text-white"
+                    className="flex items-center gap-2 h-9 rounded-lg bg-[#1c1c1c] px-3 py-2.5 font-mono text-[0.8rem] text-white/70 no-underline transition-colors hover:text-white"
                   >
                     <span className="truncate">{address}</span>
                     <ArrowRight />
@@ -93,9 +105,11 @@ export default function Tokens() {
                     </span>
                   ) : (
                     <button
-                      onClick={() => addTokenToWallet(address, token.symbol, token.decimals)}
+                      onClick={() =>
+                        addTokenToWallet(address, token.symbol, token.decimals)
+                      }
                       disabled={isAdding}
-                      className="shrink-0 rounded-lg bg-gold px-5 py-2.5 text-[0.85rem] font-semibold text-black transition-colors hover:bg-gold-light disabled:opacity-60"
+                      className="shrink-0 rounded-lg bg-gold h-9 px-3 border-none py-2.5 text-sm font-semibold text-black transition-colors hover:bg-gold-light disabled:opacity-60"
                     >
                       {isAdding ? "Adding..." : "+ Add to wallet"}
                     </button>

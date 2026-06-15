@@ -19,7 +19,7 @@ function Shell() {
       <Header />
 
       {/* Centered app content */}
-      <main className="container flex-1">
+      <main className="max-w-[570px] xl:min-w-[570px] mx-auto flex-1">
         <StatusMessage />
         <VersionSwitcher version={version} onChange={setVersion} />
 

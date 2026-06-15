@@ -256,14 +256,14 @@ export default function Swap() {
         )}
 
         <div className="slippage-settings flex justify-between mt-4">
-          <div className="input-label text-[20px] text-white">
+          <div className="input-label text-[18px] text-white">
             Slippage Tolerance
           </div>
           <div className="slippage-options">
             {SLIPPAGE_PRESETS.map((s) => (
               <button
                 key={s}
-                className={`slippage-btn${slippage === s && !customSlippage ? " active" : ""}`}
+                className={`slippage-btn ${slippage === s && !customSlippage ? " active" : ""}`}
                 onClick={() => handleSetSlippage(s)}
               >
                 {s}%
