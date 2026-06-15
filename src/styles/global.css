@@ -1484,6 +1484,11 @@ input[type=number] {
     background: none;
 }
 
+#v3Section,
+#v2Section {
+    width: 100%;
+}
+
 .add-token-btn.added {
     border-color: var(--gold);
     color: var(--gold);
@@ -1499,11 +1504,10 @@ input[type=number] {
     display: flex;
     gap: 0;
     margin-bottom: 16px;
-    background: rgba(255, 215, 0, 0.03);
-    border: 2px solid rgba(255, 215, 0, 0.1);
+    background: #232323;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 14px;
-    padding: 4px;
-    overflow: hidden;
+    padding: 6px;
 }
 
 .v3-tab {
@@ -1511,45 +1515,36 @@ input[type=number] {
     padding: 10px 16px;
     background: transparent;
     border: none;
-    color: var(--gold-dark);
+    color: var(--text-primary);
     font-family: 'Inter', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 1px;
+    font-size: 0.95rem;
+    font-weight: 500;
     cursor: pointer;
     border-radius: 10px;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .v3-tab.active {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.05));
-    color: var(--gold);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+    background: var(--gold);
+    color: #000;
+    font-weight: 600;
 }
 
 .v3-tab:hover:not(.active) {
-    color: var(--gold);
-    background: rgba(255, 215, 0, 0.04);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .v3-card {
     position: relative;
-    background: linear-gradient(145deg, rgba(15, 15, 8, 0.95) 0%, rgba(5, 5, 2, 0.98) 100%);
-    border: 2px solid rgba(255, 215, 0, 0.15);
+    background: #232323;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
-    padding: 24px 20px;
+    padding: 28px;
     overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.03);
 }
 
 .v3-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    content: none;
 }
 
 /* Fee Tier Selector */
@@ -1560,10 +1555,10 @@ input[type=number] {
 .fee-tier-label {
     font-family: 'Inter', sans-serif;
     font-size: 0.65rem;
-    color: var(--gold-dark);
+    color: rgba(255, 255, 255, 0.5);
     letter-spacing: 1px;
     margin-bottom: 10px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .fee-tiers {
@@ -1574,24 +1569,23 @@ input[type=number] {
 .fee-tier-btn {
     flex: 1;
     padding: 10px 6px;
-    background: rgba(255, 215, 0, 0.03);
-    border: 1px solid rgba(255, 215, 0, 0.1);
+    background: #2e2e2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
-    color: var(--gold-dark);
+    color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
     text-align: center;
 }
 
 .fee-tier-btn.active {
     border-color: var(--gold);
-    background: rgba(255, 215, 0, 0.08);
-    color: var(--gold);
-    box-shadow: 0 0 12px rgba(255, 215, 0, 0.1);
+    background: var(--gold);
+    color: #000;
 }
 
 .fee-tier-btn:hover:not(.active) {
-    border-color: rgba(255, 215, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.25);
 }
 
 .fee-tier-value {
@@ -1602,7 +1596,7 @@ input[type=number] {
 
 .fee-tier-desc {
     font-size: 0.6rem;
-    color: #6a5a3a;
+    color: var(--gold-dark);
     margin-top: 3px;
 }
 
@@ -1704,7 +1698,7 @@ input[type=number] {
     justify-content: space-between;
     margin-top: 4px;
     font-size: 0.5rem;
-    color: #5a4a2a;
+    color: var(--gold-dark);
     font-family: 'Inter', sans-serif;
 }
 
@@ -1716,10 +1710,10 @@ input[type=number] {
 .price-range-header {
     font-family: 'Inter', sans-serif;
     font-size: 0.65rem;
-    color: var(--gold-dark);
+    color: rgba(255, 255, 255, 0.5);
     letter-spacing: 1px;
     margin-bottom: 12px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .price-range-inputs {
@@ -1729,8 +1723,8 @@ input[type=number] {
 
 .price-range-box {
     flex: 1;
-    background: rgba(255, 215, 0, 0.02);
-    border: 1px solid rgba(255, 215, 0, 0.1);
+    background: #515151;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     padding: 14px;
     text-align: center;
@@ -1738,12 +1732,12 @@ input[type=number] {
 }
 
 .price-range-box:focus-within {
-    border-color: rgba(255, 215, 0, 0.3);
+    border-color: var(--gold);
 }
 
 .price-range-box-label {
     font-size: 0.6rem;
-    color: #6a5a3a;
+    color: var(--gold-dark);
     margin-bottom: 8px;
     font-family: 'Inter', sans-serif;
     letter-spacing: 0.5px;
@@ -1760,9 +1754,9 @@ input[type=number] {
     width: 26px;
     height: 26px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 215, 0, 0.15);
-    background: rgba(255, 215, 0, 0.05);
-    color: var(--gold);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #2a2a2a;
+    color: #fff;
     font-size: 1rem;
     cursor: pointer;
     display: flex;
@@ -1774,13 +1768,13 @@ input[type=number] {
 
 .price-range-btn:hover {
     border-color: var(--gold);
-    background: rgba(255, 215, 0, 0.1);
+    background: #333;
 }
 
 .price-range-value {
     background: transparent;
     border: none;
-    color: var(--gold);
+    color: #fff;
     font-family: 'Inter', sans-serif;
     font-size: 1.2rem;
     font-weight: 700;
@@ -1790,12 +1784,12 @@ input[type=number] {
 }
 
 .price-range-value::placeholder {
-    color: rgba(255, 215, 0, 0.2);
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .price-range-per {
     font-size: 0.55rem;
-    color: #5a4a2a;
+    color: var(--gold-dark);
     margin-top: 6px;
 }
 
@@ -1808,10 +1802,10 @@ input[type=number] {
 
 .range-preset-btn {
     padding: 5px 12px;
-    background: rgba(255, 215, 0, 0.04);
-    border: 1px solid rgba(255, 215, 0, 0.1);
+    background: #2e2e2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
-    color: var(--gold-dark);
+    color: rgba(255, 255, 255, 0.7);
     font-family: 'Inter', sans-serif;
     font-size: 0.7rem;
     font-weight: 600;
@@ -1822,8 +1816,8 @@ input[type=number] {
 .range-preset-btn:hover,
 .range-preset-btn.active {
     border-color: var(--gold);
-    color: var(--gold);
-    background: rgba(255, 215, 0, 0.08);
+    color: #000;
+    background: var(--gold);
 }
 
 /* V3 Token Pair Row */
@@ -1851,15 +1845,15 @@ input[type=number] {
 .v3-deposit-label {
     font-family: 'Inter', sans-serif;
     font-size: 0.65rem;
-    color: var(--gold-dark);
+    color: rgba(255, 255, 255, 0.5);
     letter-spacing: 1px;
     margin-bottom: 10px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .v3-deposit-box {
-    background: rgba(255, 215, 0, 0.02);
-    border: 1px solid rgba(255, 215, 0, 0.1);
+    background: #515151;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     padding: 14px;
     margin-bottom: 10px;
@@ -1875,34 +1869,34 @@ input[type=number] {
 .v3-deposit-token-name {
     font-family: 'Inter', sans-serif;
     font-size: 0.7rem;
-    color: var(--gold);
-    font-weight: 700;
+    color: #fff;
+    font-weight: 600;
 }
 
 .v3-deposit-balance {
     font-size: 0.6rem;
-    color: #6a5a3a;
+    color: rgba(255, 255, 255, 0.45);
 }
 
 .v3-deposit-input {
     width: 100%;
     background: transparent;
     border: none;
-    color: var(--gold-light);
+    color: #fff;
     font-family: 'Inter', sans-serif;
     font-size: 1.3rem;
-    font-weight: 700;
+    font-weight: 600;
     outline: none;
 }
 
 .v3-deposit-input::placeholder {
-    color: rgba(255, 215, 0, 0.15);
+    color: rgba(255, 255, 255, 0.3);
 }
 
 /* V3 Position Summary */
 .v3-position-summary {
-    background: rgba(255, 215, 0, 0.03);
-    border: 1px solid rgba(255, 215, 0, 0.1);
+    background: #2a2a2a;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 12px;
     padding: 14px;
     margin: 16px 0;
@@ -1916,7 +1910,7 @@ input[type=number] {
 }
 
 .v3-summary-label {
-    color: #6a5a3a;
+    color: var(--gold-dark);
     font-weight: 500;
 }
 
@@ -1932,8 +1926,8 @@ input[type=number] {
 }
 
 .v3-position-card {
-    background: rgba(255, 215, 0, 0.02);
-    border: 1px solid rgba(255, 215, 0, 0.1);
+    background: #2a2a2a;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 14px;
     padding: 16px;
     margin-bottom: 12px;
@@ -1941,8 +1935,7 @@ input[type=number] {
 }
 
 .v3-position-card:hover {
-    border-color: rgba(255, 215, 0, 0.25);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .v3-position-header {
@@ -1956,14 +1949,14 @@ input[type=number] {
     font-family: 'Inter', sans-serif;
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--gold);
+    color: #fff;
 }
 
 .v3-position-id {
     font-size: 0.6rem;
-    color: var(--gold-dark);
+    color: rgba(255, 255, 255, 0.6);
     padding: 3px 8px;
-    background: rgba(255, 215, 0, 0.05);
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 6px;
 }
 
@@ -1977,14 +1970,14 @@ input[type=number] {
     flex: 1;
     text-align: center;
     padding: 8px;
-    background: rgba(255, 215, 0, 0.03);
+    background: #515151;
     border-radius: 8px;
-    border: 1px solid rgba(255, 215, 0, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .v3-range-label {
     font-size: 0.5rem;
-    color: #5a4a2a;
+    color: var(--gold-dark);
     margin-bottom: 3px;
     font-family: 'Inter', sans-serif;
 }
@@ -1992,7 +1985,7 @@ input[type=number] {
 .v3-range-value {
     font-family: 'Inter', sans-serif;
     font-size: 0.85rem;
-    color: var(--gold);
+    color: #fff;
     font-weight: 700;
 }
 
@@ -2042,14 +2035,14 @@ input[type=number] {
 
 .v3-stat-label {
     font-size: 0.5rem;
-    color: #5a4a2a;
+    color: var(--gold-dark);
     font-family: 'Inter', sans-serif;
 }
 
 .v3-stat-value {
     font-family: 'Inter', sans-serif;
     font-size: 0.85rem;
-    color: var(--gold);
+    color: #fff;
     font-weight: 700;
 }
 
@@ -2059,8 +2052,8 @@ input[type=number] {
 }
 
 .v3-swap-route {
-    background: rgba(255, 215, 0, 0.03);
-    border: 1px solid rgba(255, 215, 0, 0.08);
+    background: #2a2a2a;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 10px;
     padding: 10px 14px;
     margin-top: 14px;
@@ -2069,7 +2062,7 @@ input[type=number] {
 .v3-swap-route-title {
     font-family: 'Inter', sans-serif;
     font-size: 0.55rem;
-    color: #5a4a2a;
+    color: var(--gold-dark);
     letter-spacing: 1px;
     margin-bottom: 6px;
 }
@@ -2079,19 +2072,39 @@ input[type=number] {
     align-items: center;
     gap: 6px;
     font-size: 0.7rem;
-    color: var(--gold);
+    color: #fff;
     font-weight: 600;
 }
 
 .v3-route-arrow {
-    color: var(--gold-dark);
+    color: rgba(255, 255, 255, 0.4);
     font-size: 0.6rem;
 }
 
 .v3-route-fee {
     font-size: 0.5rem;
-    color: var(--gold-dark);
+    color: var(--gold);
     padding: 1px 5px;
-    background: rgba(255, 215, 0, 0.06);
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 4px;
+}
+
+/* --- Interaction cursors / states (global polish) --- */
+button:not(:disabled),
+select,
+input,
+a,
+label,
+[role="button"],
+.balance,
+.cursor-pointer {
+    cursor: pointer;
+}
+
+button:disabled,
+.action-btn:disabled,
+input:disabled,
+select:disabled,
+[disabled] {
+    cursor: not-allowed;
 }

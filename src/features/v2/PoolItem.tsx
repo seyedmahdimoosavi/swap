@@ -1,4 +1,5 @@
 import { ERC20_ABI, PAIR_ABI, ROUTER_ABI } from "../../config/abis";
+import { showStatus } from "../../context/StatusContext";
 import type { Pool, StatusType } from "../../types";
 import { addressUrl, errorMessage, formatLocale } from "../../lib/format";
 
@@ -438,7 +439,7 @@ export default function PoolItem({
   // ---------- Add LP token to wallet ----------
   const addLPToWallet = async () => {
     if (!window.ethereum) {
-      alert("Please install MetaMask to use this feature");
+      showStatus("Please install MetaMask to use this feature", "error");
       return;
     }
     try {
@@ -446,7 +447,7 @@ export default function PoolItem({
         method: "eth_requestAccounts",
       })) as string[];
       if (!accounts?.length) {
-        alert("Please connect your wallet first.");
+        showStatus("Please connect your wallet first.", "error");
         return;
       }
       const wasAdded = await window.ethereum.request({
@@ -460,11 +461,12 @@ export default function PoolItem({
           },
         },
       });
-      if (wasAdded) alert("LP token added to wallet successfully!");
+      if (wasAdded) showStatus("LP token added to wallet successfully!", "success");
     } catch (error) {
-      alert(
+      showStatus(
         "Failed to add LP token: " +
           ((error as Error).message || "Unknown error"),
+        "error",
       );
     }
   };

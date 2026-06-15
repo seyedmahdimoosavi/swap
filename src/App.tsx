@@ -1,7 +1,6 @@
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NetworkInfo from "./components/NetworkInfo";
-import StatusMessage from "./components/StatusMessage";
 import { StatusProvider } from "./context/StatusContext";
 import V2Section from "./features/v2/V2Section";
 import V3Section from "./features/v3/V3Section";
@@ -19,8 +18,7 @@ function Shell() {
       <Header />
 
       {/* Centered app content */}
-      <main className="max-w-[570px] xl:min-w-[570px] mx-auto flex-1">
-        <StatusMessage />
+      <main className="max-w-[570px] min-w-[450px] sm:min-w-[570px] mx-auto flex-1">
         <VersionSwitcher version={version} onChange={setVersion} />
 
         <div id="v2Section" className={version === "v2" ? "" : "hidden"}>

@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Small reusable patterns that recur across the V3 components. */
+/* V3 title/label patterns, matched to the V2 look. */
 @layer components {
   .v3-card-title {
-    @apply font-display text-[0.7rem] text-gold-dark tracking-[1px] mb-4;
+    @apply mb-4 text-[1.3rem] font-semibold text-white;
   }
   .v3-field-label {
-    @apply font-display text-[0.6rem] text-gold-dark tracking-[0.5px];
+    @apply text-[0.78rem] text-white/55;
   }
 }
