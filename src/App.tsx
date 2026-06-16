@@ -18,7 +18,7 @@ function Shell() {
       <Header />
 
       {/* Centered app content */}
-      <main className="max-w-[570px] min-w-[450px] sm:min-w-[570px] mx-auto flex-1">
+      <main className="max-w-[570px] min-w-[430px] xl:min-w-[570px] mx-auto flex-1">
         <VersionSwitcher version={version} onChange={setVersion} />
 
         <div id="v2Section" className={version === "v2" ? "" : "hidden"}>

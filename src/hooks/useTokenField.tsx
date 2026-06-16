@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useWeb3 } from '../context/Web3Context';
 import { TOKEN_LIST } from '../config/contracts';
-import { loadCustomTokenInfo } from '../lib/tokens';
+import { getTokenInfoWithProvider, loadCustomTokenInfo } from '../lib/tokens';
 import type { TokenInfo } from '../types';
 
 /**
@@ -23,14 +23,15 @@ export function useTokenField(value: TokenInfo, onChange: (info: TokenInfo) => v
     setCustomAddr(known ? '' : value.address);
   }, [value.address]);
 
-  const handleSelect = (selected: string) => {
+  const handleSelect = async (selected: string) => {
     if (selected === 'custom') {
       setIsCustom(true);
       return;
     }
     setIsCustom(false);
-    const token = TOKEN_LIST[selected];
-    onChange({ address: selected, symbol: token.symbol, decimals: token.decimals });
+    // Resolve the selected token's metadata from the chain (address stays static).
+    const info = await getTokenInfoWithProvider(selected, provider ?? readOnlyProvider);
+    onChange(info);
   };
 
   const handleCustom = (addr: string) => {

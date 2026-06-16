@@ -7,6 +7,7 @@ import { useBalance } from '../../hooks/useBalance';
 import { useTokenField } from '../../hooks/useTokenField';
 import { ERC20_ABI, PAIR_ABI } from '../../config/abis';
 import { ROUTER_ADDRESS, T1_ADDRESS, T2_ADDRESS } from '../../config/contracts';
+import { getTokenInfoWithProvider } from '../../lib/tokens';
 import { addressUrl, errorMessage, shortAddress, txUrl } from '../../lib/format';
 import type { TokenInfo } from '../../types';
 
@@ -19,7 +20,15 @@ interface PoolInfo {
 }
 
 export default function Liquidity() {
-  const { factoryContract, routerContract, signer, userAddress, provider } = useWeb3();
+  const {
+    factoryContract,
+    readOnlyFactoryContract,
+    routerContract,
+    signer,
+    userAddress,
+    provider,
+    readOnlyProvider,
+  } = useWeb3();
   const { showStatus } = useStatus();
 
   const [tokenA, setTokenA] = useState<TokenInfo>({ address: T1_ADDRESS, symbol: 'T1', decimals: 18 });
@@ -39,10 +48,13 @@ export default function Liquidity() {
 
   // Read pair reserves; returns null when no pool exists.
   const readReserves = useCallback(async () => {
-    if (!factoryContract || !provider || !tokenA.address || !tokenB.address) return null;
-    const pairAddress = await factoryContract.getPair(tokenA.address, tokenB.address);
+    if (!tokenA.address || !tokenB.address) return null;
+    // Read via read-only provider so reserves show even before connecting.
+    const f = factoryContract ?? readOnlyFactoryContract;
+    const p = provider ?? readOnlyProvider;
+    const pairAddress = await f.getPair(tokenA.address, tokenB.address);
     if (pairAddress === ethers.constants.AddressZero) return { pairAddress, exists: false } as const;
-    const pair = new ethers.Contract(pairAddress, PAIR_ABI, provider);
+    const pair = new ethers.Contract(pairAddress, PAIR_ABI, p);
     const [reserves, token0, totalSupply] = await Promise.all([
       pair.getReserves(),
       pair.token0(),
@@ -57,7 +69,7 @@ export default function Liquidity() {
       reserveB: isToken0A ? reserves.reserve1 : reserves.reserve0,
       totalSupply,
     } as const;
-  }, [factoryContract, provider, tokenA, tokenB]);
+  }, [factoryContract, readOnlyFactoryContract, provider, readOnlyProvider, tokenA, tokenB]);
 
   const updatePoolInfo = useCallback(async () => {
     try {
@@ -92,6 +104,27 @@ export default function Liquidity() {
   useEffect(() => {
     updatePoolInfo();
   }, [updatePoolInfo, refreshKey]);
+
+  // Resolve the default tokens' metadata (symbol/name/decimals) from the chain.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [a, b] = await Promise.all([
+          getTokenInfoWithProvider(T1_ADDRESS, readOnlyProvider),
+          getTokenInfoWithProvider(T2_ADDRESS, readOnlyProvider),
+        ]);
+        if (cancelled) return;
+        setTokenA((prev) => (prev.address === T1_ADDRESS ? a : prev));
+        setTokenB((prev) => (prev.address === T2_ADDRESS ? b : prev));
+      } catch {
+        /* keep defaults on failure */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [readOnlyProvider]);
 
   // Maintain the pool ratio when one side changes.
   const calculateLiquidityAmounts = async (changed: 'A' | 'B', value: string) => {

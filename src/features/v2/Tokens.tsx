@@ -1,8 +1,11 @@
 import ConnectWalletButton from "../../components/ConnectWalletButton";
 import { TOKEN_LIST } from "../../config/contracts";
 import { addressUrl } from "../../lib/format";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStatus } from "../../context/StatusContext";
+import { useWeb3 } from "../../context/Web3Context";
+import { getTokenInfoWithProvider } from "../../lib/tokens";
+import type { TokenInfo } from "../../types";
 
 function TokenCircle() {
   return (
@@ -27,8 +30,26 @@ function ArrowRight() {
 
 export default function Tokens() {
   const { showStatus } = useStatus();
+  const { readOnlyProvider } = useWeb3();
   const [adding, setAdding] = useState<string | null>(null);
   const [added, setAdded] = useState<Record<string, boolean>>({});
+  // Token addresses come from static config; their metadata is read from the chain.
+  const [tokens, setTokens] = useState<TokenInfo[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const infos = await Promise.all(
+        Object.keys(TOKEN_LIST).map((addr) =>
+          getTokenInfoWithProvider(addr, readOnlyProvider),
+        ),
+      );
+      if (!cancelled) setTokens(infos);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [readOnlyProvider]);
 
   const addTokenToWallet = async (
     address: string,
@@ -69,7 +90,8 @@ export default function Tokens() {
         </div>
 
         <div className="flex flex-col gap-4">
-          {Object.entries(TOKEN_LIST).map(([address, token]) => {
+          {tokens.map((token) => {
+            const address = token.address;
             const isAdded = added[address];
             const isAdding = adding === address;
             return (

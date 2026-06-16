@@ -1,4 +1,5 @@
 import { ROUTER_ADDRESS, T1_ADDRESS, T2_ADDRESS } from "../../config/contracts";
+import { getTokenInfoWithProvider } from "../../lib/tokens";
 import { errorMessage, txUrl } from "../../lib/format";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -20,7 +21,7 @@ interface SwapInfo {
 }
 
 export default function Swap() {
-  const { routerContract, signer, userAddress, provider } = useWeb3();
+  const { routerContract, readOnlyRouterContract, signer, userAddress, provider, readOnlyProvider } = useWeb3();
   const { showStatus } = useStatus();
 
   const [fromToken, setFromToken] = useState<TokenInfo>({
@@ -58,15 +59,12 @@ export default function Swap() {
       setToAmount("");
       return;
     }
-    if (!routerContract) {
-      setBtnText("Connect Wallet");
-      setBtnDisabled(true);
-      return;
-    }
+    // Quote reads via the read-only router so it works even before connecting.
+    const router = routerContract ?? readOnlyRouterContract;
     try {
       const amountIn = ethers.utils.parseUnits(fromAmount, fromToken.decimals);
       const path = [fromToken.address, toToken.address];
-      const amounts = await routerContract.getAmountsOut(amountIn, path);
+      const amounts = await router.getAmountsOut(amountIn, path);
       const amountOut = amounts[1];
 
       const out = parseFloat(
@@ -81,20 +79,46 @@ export default function Swap() {
         minReceived: `${parseFloat(ethers.utils.formatUnits(minOut, toToken.decimals)).toFixed(6)} ${toToken.symbol}`,
         priceImpact: "< 0.1%",
       });
-      setBtnText("Swap");
-      setBtnDisabled(false);
+      if (routerContract) {
+        setBtnText("Swap");
+        setBtnDisabled(false);
+      } else {
+        setBtnText("Connect Wallet");
+        setBtnDisabled(true);
+      }
     } catch (error) {
       console.error("Failed to calculate swap:", error);
       setBtnText("Insufficient liquidity");
       setBtnDisabled(true);
       setInfo(null);
     }
-  }, [fromAmount, routerContract, fromToken, toToken, slippage]);
+  }, [fromAmount, routerContract, readOnlyRouterContract, fromToken, toToken, slippage]);
 
   calcRef.current = calculateSwapOutput;
   useEffect(() => {
     calcRef.current();
-  }, [fromAmount, fromToken, toToken, slippage, routerContract]);
+  }, [fromAmount, fromToken, toToken, slippage, routerContract, readOnlyRouterContract]);
+
+  // Resolve the default tokens' metadata (symbol/name/decimals) from the chain.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [f, t] = await Promise.all([
+          getTokenInfoWithProvider(T1_ADDRESS, readOnlyProvider),
+          getTokenInfoWithProvider(T2_ADDRESS, readOnlyProvider),
+        ]);
+        if (cancelled) return;
+        setFromToken((prev) => (prev.address === T1_ADDRESS ? f : prev));
+        setToToken((prev) => (prev.address === T2_ADDRESS ? t : prev));
+      } catch {
+        /* keep defaults on failure */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [readOnlyProvider]);
 
   const handleSetSlippage = (value: number) => {
     setSlippage(value);

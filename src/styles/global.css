@@ -1484,11 +1484,6 @@ input[type=number] {
     background: none;
 }
 
-#v3Section,
-#v2Section {
-    width: 100%;
-}
-
 .add-token-btn.added {
     border-color: var(--gold);
     color: var(--gold);
@@ -1596,7 +1591,7 @@ input[type=number] {
 
 .fee-tier-desc {
     font-size: 0.6rem;
-    color: var(--gold-dark);
+    color: #6a5a3a;
     margin-top: 3px;
 }
 
@@ -1698,7 +1693,7 @@ input[type=number] {
     justify-content: space-between;
     margin-top: 4px;
     font-size: 0.5rem;
-    color: var(--gold-dark);
+    color: #5a4a2a;
     font-family: 'Inter', sans-serif;
 }
 
@@ -1737,7 +1732,7 @@ input[type=number] {
 
 .price-range-box-label {
     font-size: 0.6rem;
-    color: var(--gold-dark);
+    color: #6a5a3a;
     margin-bottom: 8px;
     font-family: 'Inter', sans-serif;
     letter-spacing: 0.5px;
@@ -1789,7 +1784,7 @@ input[type=number] {
 
 .price-range-per {
     font-size: 0.55rem;
-    color: var(--gold-dark);
+    color: #5a4a2a;
     margin-top: 6px;
 }
 
@@ -1910,7 +1905,7 @@ input[type=number] {
 }
 
 .v3-summary-label {
-    color: var(--gold-dark);
+    color: #6a5a3a;
     font-weight: 500;
 }
 
@@ -1977,7 +1972,7 @@ input[type=number] {
 
 .v3-range-label {
     font-size: 0.5rem;
-    color: var(--gold-dark);
+    color: #5a4a2a;
     margin-bottom: 3px;
     font-family: 'Inter', sans-serif;
 }
@@ -2035,7 +2030,7 @@ input[type=number] {
 
 .v3-stat-label {
     font-size: 0.5rem;
-    color: var(--gold-dark);
+    color: #5a4a2a;
     font-family: 'Inter', sans-serif;
 }
 
@@ -2062,7 +2057,7 @@ input[type=number] {
 .v3-swap-route-title {
     font-family: 'Inter', sans-serif;
     font-size: 0.55rem;
-    color: var(--gold-dark);
+    color: #5a4a2a;
     letter-spacing: 1px;
     margin-bottom: 6px;
 }
@@ -2088,7 +2083,6 @@ input[type=number] {
     background: rgba(255, 255, 255, 0.06);
     border-radius: 4px;
 }
-
 /* --- Interaction cursors / states (global polish) --- */
 button:not(:disabled),
 select,

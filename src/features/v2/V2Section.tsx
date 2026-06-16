@@ -31,17 +31,17 @@ export default function V2Section() {
       </div>
 
       <div className={tab === 'swap' ? 'tab-content' : 'hidden'}>
-        <Swap />
+        {tab === 'swap' && <Swap />}
       </div>
       <div className={tab === 'liquidity' ? 'tab-content' : 'hidden'}>
-        <Liquidity />
+        {tab === 'liquidity' && <Liquidity />}
       </div>
       <div className={tab === 'pools' ? 'tab-content' : 'hidden'}>
-        {/* Pools loads on mount; remount each time the tab is opened. */}
+        {/* Each tab mounts on open so it re-reads from RPC, like switchTab() in the original. */}
         {tab === 'pools' && <Pools />}
       </div>
       <div className={tab === 'addToken' ? 'tab-content' : 'hidden'}>
-        <Tokens />
+        {tab === 'addToken' && <Tokens />}
       </div>
     </>
   );

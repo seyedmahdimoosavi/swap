@@ -13,18 +13,18 @@ export async function getTokenInfoWithProvider(
   address: string,
   provider: AnyProvider,
 ): Promise<TokenInfo> {
-  const known = TOKEN_LIST[address];
-  if (known) return { address, ...known };
-
+  // Read metadata from the chain first; fall back to the static list only on failure.
   try {
     const token = new ethers.Contract(address, ERC20_ABI, provider);
     const [symbol, decimals, name] = await Promise.all([
-      token.symbol().catch(() => '???'),
-      token.decimals().catch(() => 18),
+      token.symbol(),
+      token.decimals(),
       token.name().catch(() => 'Unknown Token'),
     ]);
     return { address, symbol, decimals, name };
   } catch {
+    const known = TOKEN_LIST[address];
+    if (known) return { address, ...known };
     return { address, symbol: '???', decimals: 18, name: 'Unknown' };
   }
 }

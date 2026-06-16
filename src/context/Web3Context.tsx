@@ -28,6 +28,7 @@ interface Web3ContextValue {
   routerContract: ethers.Contract | null;
   factoryContract: ethers.Contract | null;
   readOnlyFactoryContract: ethers.Contract;
+  readOnlyRouterContract: ethers.Contract;
   isConnected: boolean;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
@@ -48,6 +49,9 @@ export function Web3Provider({ children }: { children: ReactNode }) {
   const [factoryContract, setFactoryContract] = useState<ethers.Contract | null>(null);
   const [readOnlyFactoryContract, setReadOnlyFactoryContract] = useState<ethers.Contract>(
     () => new ethers.Contract(FACTORY_ADDRESS, FACTORY_ABI, readOnlyProvider),
+  );
+  const [readOnlyRouterContract] = useState<ethers.Contract>(
+    () => new ethers.Contract(ROUTER_ADDRESS, ROUTER_ABI, readOnlyProvider),
   );
 
   const connectWallet = useCallback(async () => {
@@ -184,6 +188,7 @@ export function Web3Provider({ children }: { children: ReactNode }) {
     routerContract,
     factoryContract,
     readOnlyFactoryContract,
+    readOnlyRouterContract,
     isConnected: !!userAddress,
     connectWallet,
     disconnectWallet,
