@@ -37,7 +37,8 @@ interface Web3ContextValue {
 const Web3Context = createContext<Web3ContextValue | null>(null);
 
 // The read-only provider works without a wallet (used for the Pools list).
-const readOnlyProvider = new ethers.providers.JsonRpcProvider(RPC_URL);
+// Batch provider: same-tick read calls are combined into a single HTTP request.
+const readOnlyProvider = new ethers.providers.JsonRpcBatchProvider(RPC_URL);
 
 export function Web3Provider({ children }: { children: ReactNode }) {
   const { showStatus } = useStatus();

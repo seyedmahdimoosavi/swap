@@ -4,14 +4,26 @@ import type { StatusType } from "../types";
 
 function CheckIcon() {
   return (
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+    <svg
+      className="h-4 w-4"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+    >
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
 }
 function XIcon() {
   return (
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+    <svg
+      className="h-4 w-4"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+    >
       <line x1="18" y1="6" x2="6" y2="18" />
       <line x1="6" y1="6" x2="18" y2="18" />
     </svg>
@@ -19,7 +31,13 @@ function XIcon() {
 }
 function InfoIcon() {
   return (
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+    <svg
+      className="h-4 w-4"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+    >
       <line x1="12" y1="8" x2="12" y2="8" />
       <line x1="12" y1="11" x2="12" y2="16" />
     </svg>
@@ -28,11 +46,35 @@ function InfoIcon() {
 
 const VARIANTS: Record<
   StatusType,
-  { border: string; text: string; iconBg: string; iconColor: string; icon: ReactNode }
+  {
+    border: string;
+    text: string;
+    iconBg: string;
+    iconColor: string;
+    icon: ReactNode;
+  }
 > = {
-  success: { border: "#2fae5f", text: "#54d189", iconBg: "#1f7a44", iconColor: "#ffffff", icon: <CheckIcon /> },
-  error: { border: "#e05a5a", text: "#ef7a7a", iconBg: "#6e2b2b", iconColor: "#f3a6a6", icon: <XIcon /> },
-  info: { border: "#F5BC27", text: "#F5BC27", iconBg: "#5a4514", iconColor: "#ffd35c", icon: <InfoIcon /> },
+  success: {
+    border: "#2fae5f",
+    text: "#54d189",
+    iconBg: "#1f7a44",
+    iconColor: "#ffffff",
+    icon: <CheckIcon />,
+  },
+  error: {
+    border: "#e05a5a",
+    text: "#ef7a7a",
+    iconBg: "#6e2b2b",
+    iconColor: "#f3a6a6",
+    icon: <XIcon />,
+  },
+  info: {
+    border: "#F5BC27",
+    text: "#F5BC27",
+    iconBg: "#5a4514",
+    iconColor: "#ffd35c",
+    icon: <InfoIcon />,
+  },
 };
 
 function ToastCard({
@@ -63,10 +105,13 @@ function ToastCard({
 
 /** Show a toast notification (kept name-compatible with the old API). */
 export function showStatus(message: ReactNode, type: StatusType = "info") {
-  const duration = type === "success" ? 15000 : type === "error" ? 8000 : 5000;
-  toast.custom((t) => <ToastCard type={type} message={message} visible={t.visible} />, {
-    duration,
-  });
+  const duration = type === "success" ? 6000 : type === "error" ? 6000 : 3000;
+  toast.custom(
+    (t) => <ToastCard type={type} message={message} visible={t.visible} />,
+    {
+      duration,
+    },
+  );
 }
 
 /** Dismiss all toasts. */
@@ -83,7 +128,11 @@ export function StatusProvider({ children }: { children: ReactNode }) {
   return (
     <>
       {children}
-      <Toaster position="top-right" gutter={12} containerStyle={{ top: 24, right: 24 }} />
+      <Toaster
+        position="top-right"
+        gutter={12}
+        containerStyle={{ top: 24, right: 24 }}
+      />
     </>
   );
 }

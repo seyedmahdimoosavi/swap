@@ -9,10 +9,17 @@ type AnyProvider = ethers.providers.Provider;
  * Resolve token metadata for an address, preferring the static list and
  * falling back to on-chain calls. Mirrors getTokenInfoWithProvider().
  */
+// Token metadata (symbol/name/decimals) is immutable, so cache it for the session.
+const metaCache = new Map<string, TokenInfo>();
+
 export async function getTokenInfoWithProvider(
   address: string,
   provider: AnyProvider,
 ): Promise<TokenInfo> {
+  const key = address.toLowerCase();
+  const cached = metaCache.get(key);
+  if (cached) return cached;
+
   // Read metadata from the chain first; fall back to the static list only on failure.
   try {
     const token = new ethers.Contract(address, ERC20_ABI, provider);
@@ -21,7 +28,9 @@ export async function getTokenInfoWithProvider(
       token.decimals(),
       token.name().catch(() => 'Unknown Token'),
     ]);
-    return { address, symbol, decimals, name };
+    const info: TokenInfo = { address, symbol, decimals, name };
+    metaCache.set(key, info); // cache only successful chain reads
+    return info;
   } catch {
     const known = TOKEN_LIST[address];
     if (known) return { address, ...known };
