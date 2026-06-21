@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import ConnectWalletButton from '../../components/ConnectWalletButton';
 
 interface MiniChartProps {
   min: number;
@@ -70,7 +71,10 @@ function MiniChart({ min, max, current }: MiniChartProps) {
 export default function V3Positions() {
   return (
     <div className="v3-card">
-      <div className="v3-card-title">YOUR POSITIONS</div>
+      <div className="flex items-center justify-between mb-[18px]">
+        <div className="v3-card-title mb-0">YOUR POSITIONS</div>
+        <ConnectWalletButton />
+      </div>
 
       <div className="v3-positions-section">
         {/* Sample Position 1 */}

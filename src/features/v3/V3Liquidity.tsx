@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useStatus } from '../../context/StatusContext';
 import { generateLiquidityData, V3_CURRENT_PRICE } from '../../lib/v3';
+import { useWeb3 } from '../../context/Web3Context';
+import ConnectWalletButton from '../../components/ConnectWalletButton';
 
 interface Props {
   selectedFee: number;
@@ -23,6 +25,7 @@ const PRESETS = [
 
 export default function V3Liquidity({ selectedFee, onSelectFee }: Props) {
   const { showStatus } = useStatus();
+  const { isConnected, connectWallet } = useWeb3();
   const [token0, setToken0] = useState('T1');
   const [token1, setToken1] = useState('T2');
   const [minPrice, setMinPrice] = useState(1500);
@@ -103,7 +106,10 @@ export default function V3Liquidity({ selectedFee, onSelectFee }: Props) {
 
   return (
     <div className="v3-card">
-      <div className="v3-card-title">ADD LIQUIDITY V3</div>
+      <div className="flex items-center justify-between mb-[18px]">
+        <div className="v3-card-title mb-0">ADD LIQUIDITY V3</div>
+        <ConnectWalletButton />
+      </div>
 
       <div className="v3-pair-row">
         <div className="v3-pair-select flex-1">
@@ -265,12 +271,16 @@ export default function V3Liquidity({ selectedFee, onSelectFee }: Props) {
       <button
         className="action-btn w-full"
         onClick={() => {
-          showStatus('V3 Add Liquidity: Connect wallet and deploy V3 contracts first', 'error');
+          if (!isConnected) {
+            connectWallet();
+            return;
+          }
+          showStatus('V3 is not available yet — V3 contracts are not deployed.', 'error');
           setDeposit0('');
           setDeposit1('');
         }}
       >
-        Add Liquidity
+        {isConnected ? 'Add Liquidity' : 'Connect Wallet'}
       </button>
     </div>
   );

@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useStatus } from '../../context/StatusContext';
 import { V3_CURRENT_PRICE } from '../../lib/v3';
+import { useWeb3 } from '../../context/Web3Context';
+import ConnectWalletButton from '../../components/ConnectWalletButton';
 
 export default function V3Swap({ selectedFee }: { selectedFee: number }) {
   const { showStatus } = useStatus();
+  const { isConnected, connectWallet } = useWeb3();
   const [fromToken, setFromToken] = useState('T1');
   const [toToken, setToToken] = useState('T2');
   const [fromAmount, setFromAmount] = useState('');
@@ -27,7 +30,10 @@ export default function V3Swap({ selectedFee }: { selectedFee: number }) {
 
   return (
     <div className="v3-card">
-      <div className="v3-card-title">SWAP V3</div>
+      <div className="flex items-center justify-between mb-[18px]">
+        <div className="v3-card-title mb-0">SWAP V3</div>
+        <ConnectWalletButton />
+      </div>
 
       <div className="input-group mb-3">
         <label className="v3-field-label">From</label>
@@ -99,11 +105,15 @@ export default function V3Swap({ selectedFee }: { selectedFee: number }) {
       <button
         className="action-btn w-full"
         onClick={() => {
-          showStatus('V3 Swap: Connect wallet and deploy V3 contracts first', 'error');
+          if (!isConnected) {
+            connectWallet();
+            return;
+          }
+          showStatus('V3 is not available yet — V3 contracts are not deployed.', 'error');
           setFromAmount('');
         }}
       >
-        Swap
+        {isConnected ? 'Swap' : 'Connect Wallet'}
       </button>
     </div>
   );
