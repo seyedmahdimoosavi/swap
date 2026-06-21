@@ -1,6 +1,8 @@
 import ConnectWalletButton from "../../components/ConnectWalletButton";
 import { TOKEN_LIST } from "../../config/contracts";
-import { addressUrl } from "../../lib/format";
+import { addressUrl, formatLocale } from "../../lib/format";
+import { ethers } from "ethers";
+import { ERC20_ABI } from "../../config/abis";
 import { useEffect, useState } from "react";
 import { useStatus } from "../../context/StatusContext";
 import { useWeb3 } from "../../context/Web3Context";
@@ -30,11 +32,15 @@ function ArrowRight() {
 
 export default function Tokens() {
   const { showStatus } = useStatus();
-  const { readOnlyProvider } = useWeb3();
+  const { readOnlyProvider, userAddress } = useWeb3();
   const [adding, setAdding] = useState<string | null>(null);
   const [added, setAdded] = useState<Record<string, boolean>>({});
   // Token addresses come from static config; their metadata is read from the chain.
   const [tokens, setTokens] = useState<TokenInfo[]>([]);
+  // Connected wallet's balance per token, read from RPC.
+  const [balances, setBalances] = useState<
+    Record<string, { text: string; held: boolean }>
+  >({});
 
   useEffect(() => {
     let cancelled = false;
@@ -50,6 +56,35 @@ export default function Tokens() {
       cancelled = true;
     };
   }, [readOnlyProvider]);
+
+  // Read the connected wallet's balance for each listed token (from RPC).
+  useEffect(() => {
+    if (!userAddress || tokens.length === 0) {
+      setBalances({});
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const entries = await Promise.all(
+        tokens.map(async (t) => {
+          try {
+            const c = new ethers.Contract(t.address, ERC20_ABI, readOnlyProvider);
+            const bal = await c.balanceOf(userAddress);
+            return [
+              t.address,
+              { text: formatLocale(bal, t.decimals), held: !bal.isZero() },
+            ] as const;
+          } catch {
+            return [t.address, { text: "0", held: false }] as const;
+          }
+        }),
+      );
+      if (!cancelled) setBalances(Object.fromEntries(entries));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [tokens, userAddress, readOnlyProvider]);
 
   const addTokenToWallet = async (
     address: string,
@@ -94,6 +129,8 @@ export default function Tokens() {
             const address = token.address;
             const isAdded = added[address];
             const isAdding = adding === address;
+            const bal = balances[address];
+            const held = bal?.held ?? false;
             return (
               <div key={address} className="rounded-2xl bg-[#333333] p-5">
                 {/* Row 1: identity + full name */}
@@ -121,7 +158,11 @@ export default function Tokens() {
                     <span className="truncate">{address}</span>
                     <ArrowRight />
                   </a>
-                  {isAdded ? (
+                  {held ? (
+                    <span className="flex shrink-0 items-center gap-1.5 rounded-lg border border-in-range/40 bg-in-range/10 px-4 py-2.5 text-[0.85rem] font-semibold text-in-range">
+                      ✓ Balance: {bal?.text}
+                    </span>
+                  ) : isAdded ? (
                     <span className="flex shrink-0 items-center gap-1.5 rounded-lg border border-in-range/40 bg-in-range/10 px-4 py-2.5 text-[0.85rem] font-semibold text-in-range">
                       ✓ Added
                     </span>
