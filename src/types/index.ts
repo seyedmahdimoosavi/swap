@@ -27,7 +27,7 @@ export interface Pool {
 
 export type StatusType = 'info' | 'success' | 'error';
 
-export type V2Tab = 'swap' | 'liquidity' | 'pools' | 'addToken';
+export type V2Tab = 'swap' | 'liquidity' | 'wdoto' | 'pools' | 'addToken';
 export type V3Tab = 'v3swap' | 'v3liquidity' | 'v3positions';
 export type Version = 'v2' | 'v3';
 

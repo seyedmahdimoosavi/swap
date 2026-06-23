@@ -1732,7 +1732,7 @@ input[type=number] {
 
 .price-range-box-label {
     font-size: 0.6rem;
-    color: #6a5a3a;
+    color: var(--gold-dark);
     margin-bottom: 8px;
     font-family: 'Inter', sans-serif;
     letter-spacing: 0.5px;
@@ -2083,6 +2083,7 @@ input[type=number] {
     background: rgba(255, 255, 255, 0.06);
     border-radius: 4px;
 }
+
 /* --- Interaction cursors / states (global polish) --- */
 button:not(:disabled),
 select,
@@ -2101,4 +2102,231 @@ input:disabled,
 select:disabled,
 [disabled] {
     cursor: not-allowed;
+}
+
+/* ===== V3 REAL-CONTRACT UI (ported from HTML) ===== */
+.v3-tx-status {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    animation: fadeIn 0.3s ease;
+    word-break: break-all;
+}
+
+.v3-tx-status.pending {
+    background: rgba(255, 165, 0, 0.08);
+    border: 1px solid rgba(255, 165, 0, 0.3);
+    color: #ffa500;
+}
+
+.v3-tx-status.success {
+    background: rgba(0, 255, 100, 0.08);
+    border: 1px solid rgba(0, 255, 100, 0.3);
+    color: #00ff64;
+}
+
+.v3-tx-status.error {
+    background: rgba(255, 68, 68, 0.08);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    color: #ff4444;
+}
+
+.v3-tx-status a {
+    color: var(--gold) !important;
+    text-decoration: underline !important;
+}
+
+.v3-tx-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 6px 12px;
+    background: rgba(255, 215, 0, 0.08);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 8px;
+    color: var(--gold);
+    text-decoration: none !important;
+    font-size: 0.7rem;
+    font-family: 'Orbitron', sans-serif;
+    transition: all 0.3s;
+}
+
+.v3-tx-link:hover {
+    background: rgba(255, 215, 0, 0.15);
+    border-color: var(--gold);
+}
+
+.v3-add-nft-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.04));
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 10px;
+    color: var(--gold);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.v3-add-nft-btn:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: var(--gold);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.v3-add-nft-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.v3-add-nft-btn .nft-icon {
+    font-size: 1rem;
+}
+
+.v3-position-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.v3-pos-action-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 8px 12px;
+    background: rgba(255, 215, 0, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 8px;
+    color: var(--gold-dark);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.v3-pos-action-btn:hover {
+    background: rgba(255, 215, 0, 0.1);
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.v3-pos-action-btn.danger {
+    border-color: rgba(255, 68, 68, 0.2);
+    color: #ff6b6b;
+}
+
+.v3-pos-action-btn.danger:hover {
+    background: rgba(255, 68, 68, 0.1);
+    border-color: #ff4444;
+}
+
+.v3-slippage-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.v3-slippage-row label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    color: var(--gold-dark);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.v3-slippage-input {
+    width: 60px;
+    background: rgba(255, 215, 0, 0.03);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 8px;
+    color: var(--gold);
+    padding: 6px 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+}
+
+.v3-slippage-input:focus {
+    border-color: var(--gold);
+}
+
+.v3-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: v3spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+@keyframes v3spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.v3-swap-fee-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.v3-swap-fee-btn {
+    flex: 1;
+    padding: 6px 8px;
+    background: rgba(255, 215, 0, 0.03);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    border-radius: 8px;
+    color: var(--gold-dark);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.v3-swap-fee-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(255, 215, 0, 0.08);
+}
+
+.v3-swap-fee-btn:hover:not(.active) {
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.v3-no-positions {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gold-dark);
+}
+
+.v3-no-positions .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    opacity: 0.3;
+}
+
+.v3-no-positions p {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Swap from './Swap';
 import Liquidity from './Liquidity';
+import WDoto from './WDoto';
 import Pools from './Pools';
 import Tokens from './Tokens';
 import type { V2Tab } from '../../types';
@@ -8,6 +9,7 @@ import type { V2Tab } from '../../types';
 const TABS: { id: V2Tab; label: string }[] = [
   { id: 'swap', label: 'Swap' },
   { id: 'liquidity', label: 'Liquidity' },
+  { id: 'wdoto', label: 'WDOTO' },
   { id: 'pools', label: 'Pools' },
   { id: 'addToken', label: 'Tokens' },
 ];
@@ -35,6 +37,9 @@ export default function V2Section() {
       </div>
       <div className={tab === 'liquidity' ? 'tab-content' : 'hidden'}>
         {tab === 'liquidity' && <Liquidity />}
+      </div>
+      <div className={tab === 'wdoto' ? 'tab-content' : 'hidden'}>
+        {tab === 'wdoto' && <WDoto />}
       </div>
       <div className={tab === 'pools' ? 'tab-content' : 'hidden'}>
         {/* Each tab mounts on open so it re-reads from RPC, like switchTab() in the original. */}

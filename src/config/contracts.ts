@@ -7,7 +7,7 @@ export const FACTORY_ADDRESS = '0xD728243a996C615a44Eedcd40AE311083B9b9279'; // 
 // Network config
 export const CHAIN_ID = 505;
 export const CHAIN_ID_HEX = '0x' + CHAIN_ID.toString(16);
-export const RPC_URL = 'https://rpc.dotone.online';
+export const RPC_URL = 'https://rpc.dotscan.online';
 export const EXPLORER_URL = 'https://dotscan.one';
 
 export const NETWORK_CONFIG = {
@@ -25,6 +25,9 @@ export const NETWORK_CONFIG = {
 // Token addresses as constants so selects / defaults can reference them.
 export const T1_ADDRESS = '0xE9aE7eBA1ca2ec36e03c462Fd232Ab3Da74a4231';
 export const T2_ADDRESS = '0x8e23900Cbc4d0c6c73ac8Fe5d9607B89Ac3AD2e1';
+
+// Wrapped DOTO (native wrapper) used by the WDOTO tab.
+export const WDOTO_ADDRESS = '0x044b2ED77214aeA517e811f5c80980511F8ff326';
 
 // Token list from DotOneSmartchain Explorer (keyed by address).
 export const TOKEN_LIST: Record<string, TokenListEntry> = {

@@ -6,7 +6,6 @@ import type { V3Tab } from '../../types';
 
 export default function V3Section() {
   const [tab, setTab] = useState<V3Tab>('v3swap');
-  const [selectedFee, setSelectedFee] = useState(0.3);
 
   return (
     <div className="v3-container">
@@ -23,11 +22,11 @@ export default function V3Section() {
       </div>
 
       <div style={{ display: tab === 'v3swap' ? 'block' : 'none' }}>
-        <V3Swap selectedFee={selectedFee} />
+        <V3Swap />
       </div>
       <div style={{ display: tab === 'v3liquidity' ? 'block' : 'none' }}>
         {/* Mount only when active so the canvas sizes correctly. */}
-        {tab === 'v3liquidity' && <V3Liquidity selectedFee={selectedFee} onSelectFee={setSelectedFee} />}
+        {tab === 'v3liquidity' && <V3Liquidity />}
       </div>
       <div style={{ display: tab === 'v3positions' ? 'block' : 'none' }}>
         {tab === 'v3positions' && <V3Positions />}

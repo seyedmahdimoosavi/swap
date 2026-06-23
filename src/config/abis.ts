@@ -35,3 +35,14 @@ export const PAIR_ABI = [
   'function totalSupply() external view returns (uint)',
   'function balanceOf(address owner) external view returns (uint)',
 ];
+
+// Wrapped DOTO (WDOTO) — ported verbatim from the HTML.
+export const WDOTO_ABI = [
+  'function deposit() public payable',
+  'function withdraw(uint wad) public',
+  'function balanceOf(address owner) external view returns (uint)',
+  'function totalSupply() external view returns (uint)',
+  'function name() external view returns (string)',
+  'function symbol() external view returns (string)',
+  'function decimals() external view returns (uint8)',
+];

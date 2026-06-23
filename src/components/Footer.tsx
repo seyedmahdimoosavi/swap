@@ -1,4 +1,4 @@
-import Logo from "../assets/doto.png";
+import Logo from "@/assets/doto.png";
 import { useState } from "react";
 
 /* --- inline social icons (stroke = currentColor) --- */
