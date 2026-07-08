@@ -1,5 +1,5 @@
 import ConnectWalletButton from "../../components/ConnectWalletButton";
-import { TOKEN_LIST } from "../../config/contracts";
+import { useTokenList } from "../../context/TokenListContext";
 import { addressUrl, formatLocale } from "../../lib/format";
 import { ethers } from "ethers";
 import { ERC20_ABI } from "../../config/abis";
@@ -33,29 +33,13 @@ function ArrowRight() {
 export default function Tokens() {
   const { showStatus } = useStatus();
   const { readOnlyProvider, userAddress } = useWeb3();
+  const { tokens } = useTokenList();
   const [adding, setAdding] = useState<string | null>(null);
   const [added, setAdded] = useState<Record<string, boolean>>({});
-  // Token addresses come from static config; their metadata is read from the chain.
-  const [tokens, setTokens] = useState<TokenInfo[]>([]);
   // Connected wallet's balance per token, read from RPC.
   const [balances, setBalances] = useState<
     Record<string, { text: string; held: boolean }>
   >({});
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const infos = await Promise.all(
-        Object.keys(TOKEN_LIST).map((addr) =>
-          getTokenInfoWithProvider(addr, readOnlyProvider),
-        ),
-      );
-      if (!cancelled) setTokens(infos);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [readOnlyProvider]);
 
   // Read the connected wallet's balance for each listed token (from RPC).
   useEffect(() => {

@@ -17,12 +17,12 @@ import {
   v3ComputeSqrtPriceX96,
   v3FeeToPercent,
   v3GetErrorMessage,
-  v3GetTokenList,
   v3NearestUsableTick,
   v3PriceToTick,
   v3SafeParseUnits,
   v3SqrtPriceToPrice,
 } from "../../lib/v3";
+import { useTokenList } from "../../context/TokenListContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import ConnectWalletButton from "../../components/ConnectWalletButton";
@@ -59,11 +59,9 @@ export default function V3Liquidity() {
   const { showStatus } = useStatus();
   const reads = provider ?? readOnlyProvider;
 
-  const tokens = v3GetTokenList();
-  const [t0Sel, setT0Sel] = useState(tokens[0]?.address ?? "");
-  const [t1Sel, setT1Sel] = useState(
-    tokens[1]?.address ?? tokens[0]?.address ?? "",
-  );
+  const tokens = useTokenList().tokens;
+  const [t0Sel, setT0Sel] = useState("");
+  const [t1Sel, setT1Sel] = useState("");
   const [feeTier, setFeeTier] = useState(3000);
   const [minPrice, setMinPrice] = useState("0");
   const [maxPrice, setMaxPrice] = useState("0");
@@ -76,6 +74,13 @@ export default function V3Liquidity() {
   const [adding, setAdding] = useState(false);
   const [mintedTokenId, setMintedTokenId] = useState<string | null>(null);
   const [activePreset, setActivePreset] = useState(20);
+
+  // Default the pair selects to the first two discovered tokens once loaded.
+  useEffect(() => {
+    if (tokens.length === 0) return;
+    setT0Sel((prev) => prev || tokens[0].address);
+    setT1Sel((prev) => prev || tokens[1]?.address || tokens[0].address);
+  }, [tokens]);
 
   // Live pool state (refs so the chart effect can read latest without re-subscribing)
   const poolAddrRef = useRef<string | null>(null);

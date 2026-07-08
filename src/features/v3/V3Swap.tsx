@@ -9,11 +9,11 @@ import {
   getV3TokenInfo,
   v3FeeToPercent,
   v3GetErrorMessage,
-  v3GetTokenList,
   v3SafeParseUnits,
   v3ValidatePool,
   v3CheckBalance,
 } from '../../lib/v3';
+import { useTokenList } from '../../context/TokenListContext';
 
 const SWAP_FEES = [100, 500, 3000, 10000];
 
@@ -30,9 +30,9 @@ export default function V3Swap() {
   const { readOnlyProvider, provider, signer, userAddress, isConnected, connectWallet } = useWeb3();
   const { showStatus } = useStatus();
 
-  const tokens = v3GetTokenList();
-  const [fromToken, setFromToken] = useState(tokens[0]?.address ?? '');
-  const [toToken, setToToken] = useState(tokens[1]?.address ?? tokens[0]?.address ?? '');
+  const tokens = useTokenList().tokens;
+  const [fromToken, setFromToken] = useState('');
+  const [toToken, setToToken] = useState('');
   const [fromAmount, setFromAmount] = useState('');
   const [toAmount, setToAmount] = useState('');
   const [slippage, setSlippage] = useState('0.5');
@@ -46,6 +46,13 @@ export default function V3Swap() {
 
   const quoteTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reads = provider ?? readOnlyProvider;
+
+  // Default the selects to the first two discovered tokens once loaded.
+  useEffect(() => {
+    if (tokens.length === 0) return;
+    setFromToken((prev) => prev || tokens[0].address);
+    setToToken((prev) => prev || tokens[1]?.address || tokens[0].address);
+  }, [tokens]);
 
   // Balances
   useEffect(() => {

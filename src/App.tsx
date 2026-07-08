@@ -7,6 +7,7 @@ import V3Section from "./features/v3/V3Section";
 import type { Version } from "./types";
 import VersionSwitcher from "./components/VersionSwitcher";
 import { Web3Provider } from "./context/Web3Context";
+import { TokenListProvider } from "./context/TokenListContext";
 import { useState } from "react";
 
 function Shell() {
@@ -42,7 +43,9 @@ export default function App() {
   return (
     <StatusProvider>
       <Web3Provider>
-        <Shell />
+        <TokenListProvider>
+          <Shell />
+        </TokenListProvider>
       </Web3Provider>
     </StatusProvider>
   );

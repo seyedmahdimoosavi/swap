@@ -1,4 +1,4 @@
-import { ROUTER_ADDRESS, T1_ADDRESS, T2_ADDRESS } from "../../config/contracts";
+import { ROUTER_ADDRESS } from "../../config/contracts";
 import { getTokenInfoWithProvider } from "../../lib/tokens";
 import { errorMessage, txUrl } from "../../lib/format";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -10,6 +10,7 @@ import { ethers } from "ethers";
 import { useBalance } from "../../hooks/useBalance";
 import { useStatus } from "../../context/StatusContext";
 import { useTokenField } from "../../hooks/useTokenField";
+import { useTokenList } from "../../context/TokenListContext";
 import { useWeb3 } from "../../context/Web3Context";
 
 const SLIPPAGE_PRESETS = [0.5, 1, 2];
@@ -23,15 +24,16 @@ interface SwapInfo {
 export default function Swap() {
   const { routerContract, readOnlyRouterContract, signer, userAddress, provider, readOnlyProvider } = useWeb3();
   const { showStatus } = useStatus();
+  const { tokens: tokenList } = useTokenList();
 
   const [fromToken, setFromToken] = useState<TokenInfo>({
-    address: T1_ADDRESS,
-    symbol: "T1",
+    address: "",
+    symbol: "",
     decimals: 18,
   });
   const [toToken, setToToken] = useState<TokenInfo>({
-    address: T2_ADDRESS,
-    symbol: "T2",
+    address: "",
+    symbol: "",
     decimals: 18,
   });
   const [fromAmount, setFromAmount] = useState("");
@@ -99,26 +101,15 @@ export default function Swap() {
     calcRef.current();
   }, [fromAmount, fromToken, toToken, slippage, routerContract, readOnlyRouterContract]);
 
-  // Resolve the default tokens' metadata (symbol/name/decimals) from the chain.
+  // Pick sensible defaults (first two discovered tokens) once the RPC token
+  // list has loaded, without overriding a choice the user already made.
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const [f, t] = await Promise.all([
-          getTokenInfoWithProvider(T1_ADDRESS, readOnlyProvider),
-          getTokenInfoWithProvider(T2_ADDRESS, readOnlyProvider),
-        ]);
-        if (cancelled) return;
-        setFromToken((prev) => (prev.address === T1_ADDRESS ? f : prev));
-        setToToken((prev) => (prev.address === T2_ADDRESS ? t : prev));
-      } catch {
-        /* keep defaults on failure */
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [readOnlyProvider]);
+    if (tokenList.length === 0) return;
+    setFromToken((prev) => (prev.address ? prev : tokenList[0]));
+    setToToken((prev) =>
+      prev.address ? prev : tokenList[1] ?? tokenList[0],
+    );
+  }, [tokenList]);
 
   const handleSetSlippage = (value: number) => {
     setSlippage(value);

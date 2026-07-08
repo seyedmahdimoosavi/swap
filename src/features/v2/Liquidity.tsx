@@ -6,9 +6,10 @@ import { useStatus } from '../../context/StatusContext';
 import { useBalance } from '../../hooks/useBalance';
 import { useTokenField } from '../../hooks/useTokenField';
 import { ERC20_ABI, PAIR_ABI } from '../../config/abis';
-import { ROUTER_ADDRESS, T1_ADDRESS, T2_ADDRESS } from '../../config/contracts';
+import { ROUTER_ADDRESS } from '../../config/contracts';
 import { getTokenInfoWithProvider } from '../../lib/tokens';
 import { addressUrl, errorMessage, shortAddress, txUrl } from '../../lib/format';
+import { useTokenList } from '../../context/TokenListContext';
 import type { TokenInfo } from '../../types';
 
 interface PoolInfo {
@@ -30,14 +31,18 @@ export default function Liquidity() {
     readOnlyProvider,
   } = useWeb3();
   const { showStatus } = useStatus();
+  const { tokens: tokenList } = useTokenList();
 
-  const [tokenA, setTokenA] = useState<TokenInfo>({ address: T1_ADDRESS, symbol: 'T1', decimals: 18 });
-  const [tokenB, setTokenB] = useState<TokenInfo>({ address: T2_ADDRESS, symbol: 'T2', decimals: 18 });
+  const [tokenA, setTokenA] = useState<TokenInfo>({ address: '', symbol: '', decimals: 18 });
+  const [tokenB, setTokenB] = useState<TokenInfo>({ address: '', symbol: '', decimals: 18 });
   const [amountA, setAmountA] = useState('');
   const [amountB, setAmountB] = useState('');
   const [pool, setPool] = useState<PoolInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  // LP token minted after a successful addLiquidity, offered for "add to wallet".
+  const [lpToken, setLpToken] = useState<TokenInfo | null>(null);
+  const [addingLp, setAddingLp] = useState(false);
 
   const fieldA = useTokenField(tokenA, setTokenA);
   const fieldB = useTokenField(tokenB, setTokenB);
@@ -105,26 +110,13 @@ export default function Liquidity() {
     updatePoolInfo();
   }, [updatePoolInfo, refreshKey]);
 
-  // Resolve the default tokens' metadata (symbol/name/decimals) from the chain.
+  // Pick sensible defaults (first two discovered tokens) once the RPC token
+  // list has loaded, without overriding a user's existing choice.
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const [a, b] = await Promise.all([
-          getTokenInfoWithProvider(T1_ADDRESS, readOnlyProvider),
-          getTokenInfoWithProvider(T2_ADDRESS, readOnlyProvider),
-        ]);
-        if (cancelled) return;
-        setTokenA((prev) => (prev.address === T1_ADDRESS ? a : prev));
-        setTokenB((prev) => (prev.address === T2_ADDRESS ? b : prev));
-      } catch {
-        /* keep defaults on failure */
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [readOnlyProvider]);
+    if (tokenList.length === 0) return;
+    setTokenA((prev) => (prev.address ? prev : tokenList[0]));
+    setTokenB((prev) => (prev.address ? prev : tokenList[1] ?? tokenList[0]));
+  }, [tokenList]);
 
   // Maintain the pool ratio when one side changes.
   const calculateLiquidityAmounts = async (changed: 'A' | 'B', value: string) => {
@@ -182,6 +174,32 @@ export default function Liquidity() {
       showStatus(`Approving ${label}...`, 'info');
       const receipt = await (await token.approve(ROUTER_ADDRESS, desired, { gasLimit: 100000 })).wait();
       if (receipt.status === 0) throw new Error(`${label} approval failed!`);
+    }
+  };
+
+  const addLpToWallet = async () => {
+    if (!lpToken) return;
+    if (typeof window.ethereum === 'undefined') {
+      showStatus('Please install MetaMask to add tokens', 'error');
+      return;
+    }
+    try {
+      setAddingLp(true);
+      // MetaMask requires the watched symbol to be <= 11 characters.
+      const symbol = lpToken.symbol.slice(0, 11) || 'LP';
+      const wasAdded = await window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: { address: lpToken.address, symbol, decimals: lpToken.decimals },
+        },
+      });
+      if (wasAdded) showStatus('LP token added to wallet!', 'success');
+      else showStatus('Token addition was cancelled', 'info');
+    } catch (error) {
+      showStatus((error as Error).message || 'Failed to add LP token', 'error');
+    } finally {
+      setAddingLp(false);
     }
   };
 
@@ -278,6 +296,29 @@ export default function Liquidity() {
           </>,
           'success',
         );
+
+        // A pool (pair) LP token was minted to the user — surface an
+        // "add to wallet" button by reading the LP token's real metadata.
+        try {
+          const lp = new ethers.Contract(verifyPair, ERC20_ABI, provider ?? readOnlyProvider);
+          const [lpSymbol, lpDecimals] = await Promise.all([
+            lp.symbol().catch(() => 'DOSWAP-LP'),
+            lp.decimals().catch(() => 18),
+          ]);
+          setLpToken({
+            address: verifyPair,
+            symbol: lpSymbol,
+            decimals: lpDecimals,
+            name: `${tokenA.symbol}/${tokenB.symbol} LP`,
+          });
+        } catch {
+          setLpToken({
+            address: verifyPair,
+            symbol: 'DOSWAP-LP',
+            decimals: 18,
+            name: `${tokenA.symbol}/${tokenB.symbol} LP`,
+          });
+        }
       }
       setAmountA('');
       setAmountB('');
@@ -376,6 +417,18 @@ export default function Liquidity() {
       <button className="action-btn" onClick={addLiquidity} disabled={buttonDisabled}>
         {buttonLabel}
       </button>
+
+      {lpToken && (
+        <button
+          className="v3-add-nft-btn"
+          onClick={addLpToWallet}
+          disabled={addingLp}
+          style={{ marginTop: 12 }}
+        >
+          <span className="nft-icon">➕</span>{' '}
+          {addingLp ? 'Adding...' : `Add ${lpToken.symbol} (LP) to wallet`}
+        </button>
+      )}
     </div>
   );
 }
