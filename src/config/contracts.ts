@@ -1,4 +1,5 @@
 import type { TokenListEntry } from '../types';
+import { CURATED_TOKENS } from './tokenList';
 
 // Contract addresses (deployed on DotOneSmartchain)
 export const ROUTER_ADDRESS = '0x63b76b550FF13b8B681E65C1C5eC7D4cf30143f7'; // DotOneSwapV2Router02
@@ -25,8 +26,15 @@ export const NETWORK_CONFIG = {
 // Wrapped DOTO (native wrapper) used by the WDOTO tab.
 export const WDOTO_ADDRESS = '0x044b2ED77214aeA517e811f5c80980511F8ff326';
 
-// Runtime token registry (address -> metadata). This is NO LONGER seeded with
-// static test tokens (T1/T2 removed). It is populated at runtime by
-// discoverTokens() from the on-chain factory pairs, and used as a metadata
-// cache by getV3TokenInfo() / getTokenInfoWithProvider().
+// Runtime token registry (address -> metadata). No longer seeded with static
+// test tokens (T1/T2 removed). Pre-seeded from CURATED_TOKENS so display
+// metadata is available immediately (incl. synchronous getV3TokenInfo lookups),
+// and further populated at runtime by discoverTokens().
 export const TOKEN_LIST: Record<string, TokenListEntry> = {};
+for (const t of CURATED_TOKENS) {
+  TOKEN_LIST[t.address] = {
+    symbol: t.symbol,
+    decimals: t.decimals,
+    name: t.name ?? t.symbol,
+  };
+}

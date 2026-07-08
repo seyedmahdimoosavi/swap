@@ -9,6 +9,7 @@ import {
   MAX_TICK,
 } from '../config/v3';
 import { ERC20_ABI } from '../config/abis';
+import { getTokenInfoWithProvider } from './tokens';
 
 export const Q96 = ethers.BigNumber.from(2).pow(96);
 
@@ -37,17 +38,17 @@ export function getV3TokenInfo(address: string): V3TokenInfo {
 }
 
 export async function fetchV3TokenInfo(provider: Provider, address: string): Promise<V3TokenInfo> {
-  let info = getV3TokenInfo(address);
-  if (info.name !== 'Unknown') return info;
-  try {
-    const c = new ethers.Contract(address, ERC20_ABI, provider);
-    const [symbol, decimals, name] = await Promise.all([c.symbol(), c.decimals(), c.name()]);
-    info = { address, symbol, decimals, name };
-    TOKEN_LIST[address] = { symbol, decimals, name };
-  } catch {
-    /* keep fallback */
-  }
-  return info;
+  const existing = getV3TokenInfo(address);
+  if (existing.name !== 'Unknown') return existing;
+  const info = await getTokenInfoWithProvider(address, provider);
+  const result: V3TokenInfo = {
+    address: info.address,
+    symbol: info.symbol,
+    decimals: info.decimals,
+    name: info.name ?? info.symbol,
+  };
+  TOKEN_LIST[address] = { symbol: result.symbol, decimals: result.decimals, name: result.name };
+  return result;
 }
 
 export function v3GetTokenList(): V3TokenInfo[] {
