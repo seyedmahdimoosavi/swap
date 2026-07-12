@@ -22,13 +22,13 @@ import {
   v3SafeParseUnits,
   v3SqrtPriceToPrice,
 } from "../../lib/v3";
-import { useTokenList } from "../../context/TokenListContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import ConnectWalletButton from "../../components/ConnectWalletButton";
 import { ERC20_ABI } from "../../config/abis";
 import { ethers } from "ethers";
 import { useStatus } from "../../context/StatusContext";
+import { useTokenList } from "../../context/TokenListContext";
 import { useWeb3 } from "../../context/Web3Context";
 
 const FEE_TIERS = [
@@ -596,7 +596,7 @@ export default function V3Liquidity() {
         <ConnectWalletButton />
       </div>
 
-      <div className="v3-pair-row">
+      {/* <div className="v3-pair-row">
         <div className="v3-pair-select" style={{ flex: 1 }}>
           <select
             className="token-select"
@@ -626,7 +626,7 @@ export default function V3Liquidity() {
             ))}
           </select>
         </div>
-      </div>
+      </div> */}
 
       <div className="fee-tier-section">
         <div className="fee-tier-label">FEE TIER</div>
@@ -728,7 +728,7 @@ export default function V3Liquidity() {
         </div>
       </div>
 
-      <div className="input-group">
+      {/* <div className="input-group">
         <div className="input-label">
           <span>{t0Info.symbol} Amount</span>
           <span className="balance" onClick={() => maxDeposit(0)}>
@@ -744,8 +744,38 @@ export default function V3Liquidity() {
             onChange={(e) => setDeposit0(e.target.value)}
           />
         </div>
-      </div>
+      </div> */}
       <div className="input-group">
+        <div className="input-label">
+          <span>{t0Info.symbol} Amount</span>
+          <span className="balance" onClick={() => maxDeposit(0)}>
+            {bal0}
+          </span>
+        </div>
+
+        <div className="input-wrapper">
+          <input
+            type="number"
+            className="token-input"
+            placeholder="0.0"
+            value={deposit0}
+            onChange={(e) => setDeposit0(e.target.value)}
+          />
+
+          <select
+            className="token-select"
+            value={t0Sel}
+            onChange={(e) => setT0Sel(e.target.value)}
+          >
+            {tokens.map((t) => (
+              <option key={t.address} value={t.address}>
+                {t.symbol}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      {/* <div className="input-group">
         <div className="input-label">
           <span>{t1Info.symbol} Amount</span>
           <span className="balance" onClick={() => maxDeposit(1)}>
@@ -760,6 +790,36 @@ export default function V3Liquidity() {
             value={deposit1}
             onChange={(e) => setDeposit1(e.target.value)}
           />
+        </div>
+      </div> */}
+      <div className="input-group">
+        <div className="input-label">
+          <span>{t1Info.symbol} Amount</span>
+          <span className="balance" onClick={() => maxDeposit(1)}>
+            {bal1}
+          </span>
+        </div>
+
+        <div className="input-wrapper">
+          <input
+            type="number"
+            className="token-input"
+            placeholder="0.0"
+            value={deposit1}
+            onChange={(e) => setDeposit1(e.target.value)}
+          />
+
+          <select
+            className="token-select"
+            value={t1Sel}
+            onChange={(e) => setT1Sel(e.target.value)}
+          >
+            {tokens.map((t) => (
+              <option key={t.address} value={t.address}>
+                {t.symbol}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 

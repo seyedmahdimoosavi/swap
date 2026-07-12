@@ -1784,7 +1784,7 @@ input[type=number] {
 
 .price-range-per {
     font-size: 0.55rem;
-    color: #5a4a2a;
+    color: var(--gold-dark);
     margin-top: 6px;
 }
 
